@@ -21,12 +21,13 @@ if 'sheet' in locals():
                          'Жіноча': {'0-18': 0, '19-45': 0, '46-70': 0, '71+': 0}}
 
     # Визначення вікових категорій
-    age_categories = {'0-18': (0, 18), '19-45': (19, 45), '46-70': (46, 70), '71+': (71, float('inf'))}
+    age_categories = {'0-18': (0, 18), '19-45': (19, 45),
+                      '46-70': (46, 70), '71+': (71, float('inf'))}
 
     # Прочитаємо дані з аркушу і зробимо розрахунки
     for row in sheet.iter_rows(min_row=2, values_only=True):
-        gender = row[2]  # Стовпець "Стать"
-        age = row[9]  # Стовпець "Вік"
+        gender = row[3]  # Стовпець "Стать"
+        age = int(row[10])  # Стовпець "Вік" перетворюємо в ціле число
 
         # Розрахунок кількості співробітників за статтею
         if gender == 'Чоловіча':
@@ -73,10 +74,12 @@ if 'sheet' in locals():
 
     # Побудова діаграм для кількості співробітників жіночої та чоловічої статі в кожній віковій категорії
     for gender in gender_age_counts.keys():
-        gender_age_data = [gender_age_counts[gender][age_category] for age_category in age_categories.keys()]
+        gender_age_data = [gender_age_counts[gender][age_category]
+                           for age_category in age_categories.keys()]
         plt.figure(figsize=(8, 4))
         plt.bar(age_categories.keys(), gender_age_data)
-        plt.title(f'Кількість співробітників {gender.lower()} статі в кожній віковій категорії')
+        plt.title(
+            f'Кількість співробітників {gender.lower()} статі в кожній віковій категорії')
         plt.xlabel('Вікова категорія')
         plt.ylabel('Кількість')
         plt.show()
